@@ -1,29 +1,29 @@
 var Gulp = require('gulp'),
 
-    Linoleum = require('./index');
+    Linoleum = require('linoleum');
 
-require('./tasks/clean');
-require('./tasks/lint');
-require('./tasks/babel');
-require('./tasks/test');
-require('./tasks/karma');
-require('./tasks/cover');
+var $jsFiles = Linoleum.jsFiles;
+Linoleum.jsFiles = function() {
+  return $jsFiles().concat('tasks/*.js', 'index.js');
+};
+
+require('linoleum/tasks/clean');
+require('linoleum/tasks/lint');
+require('linoleum/tasks/cover');
+
+require('./index');
 
 Gulp.task('build', ['clean', 'lint'], function(done) {
-  Linoleum.runTask('babel', done);
-});
-Gulp.task('test', ['build'], function(done) {
-  Linoleum.runTask('test:mocha', done);
+  Linoleum.runTask('webpack', done);
 });
 Gulp.task('cover', ['build'], function(done) {
-  Linoleum.runTask(['cover:mocha', 'cover:web', 'cover:report'], done);
+  Linoleum.runTask(['cover:untested', 'cover:server', 'cover:web', 'cover:report'], done);
 });
 
 Linoleum.watch(Linoleum.jsFiles(), 'cover');
 
 Gulp.task('travis', function(done) {
-  // These need to be run in series to prevent issues with error tracking
-  Linoleum.runTask(['cover', 'test'], done);
+  Linoleum.runTask(['cover'], done);
 });
 Gulp.task('default', ['cover']);
 

@@ -3,7 +3,7 @@ import GUtil from 'gulp-util';
 import webpack from 'webpack';
 import WebpackDevServer from 'webpack-dev-server';
 
-import {CLIENT_ENTRY, BUILD_TARGET, SERVER_PORT, DEV_SERVER_PORT, WATCHING} from '../index';
+import {CLIENT_ENTRY, BUILD_TARGET, SERVER_PORT, DEV_SERVER_PORT, WATCHING} from 'linoleum';
 import loadWebpackConfig from '../src/webpack';
 
 Gulp.task('webpack', function(done) {
@@ -95,7 +95,7 @@ Gulp.task('webpack:dev-server', function(done) {
     }
   });
   server.listen(DEV_SERVER_PORT, 'localhost', function() {
-    console.log(`Dev server listening on ${devServer}`);
+    console.log(`Dev server listening on ${devServer}`);    // eslint-disable-line no-console
     done();
   });
 });

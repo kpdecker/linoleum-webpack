@@ -1,7 +1,7 @@
 import webpack from 'webpack';
 
-import {CLIENT_ENTRY, BUILD_TARGET} from '../index';
-import BABEL_DEFAULTS from '../babel-defaults';
+import {CLIENT_ENTRY, BUILD_TARGET} from 'linoleum';
+import BABEL_DEFAULTS from 'linoleum/babel-defaults';
 
 
 // Every non-relative module is external
