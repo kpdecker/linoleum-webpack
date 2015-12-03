@@ -51,7 +51,7 @@ export default function(options = {}) {
         {
           test: /\.jsx?$/,
           loader: require.resolve('babel-loader'),
-          exclude: /(node_modules(?!\/linoleum\/src)|bower_components)/,
+          exclude: /(node_modules(?!\/linoleum(?:-[^/]+)?\/src)|bower_components)/,
           query: {
             plugins: [],
             ... BABEL_DEFAULTS,
