@@ -19,6 +19,7 @@
   "private": true,
   "dependencies": {
     "babel-loader": "^6.1.0",
+    "babel-plugin-react-transform": "^1.1.1",
     "convert-source-map": "^1.1.1",
     "css-loader": "^0.21.0",
     "gulp-istanbul": "^0.10.0",
