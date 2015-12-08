@@ -54,7 +54,7 @@ Gulp.task('webpack:dev-server', function(done) {
   config.output.publicPath = `${devServer}static/`;
 
   config.module.loaders.forEach((loader) => {
-    if (loader.babel) {
+    if (loader.babel && process.env.HOT_RELOAD) {   // eslint-disable-line no-process-env
       loader.query.plugins = loader.query.plugins.concat(
         require.resolve('babel-plugin-react-transform'));
       loader.query.extra = {
