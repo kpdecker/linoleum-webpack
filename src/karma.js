@@ -7,6 +7,8 @@ import karmaCoverage from 'karma-coverage';
 import karmaMochaReporter from 'karma-mocha-reporter';
 import loadWebpackConfig from './webpack';
 
+import {WATCHING} from 'linoleum';
+
 import {resolve} from 'path';
 
 let sourceFile = `${__dirname}/webpack-web-test.js`;
@@ -32,7 +34,10 @@ module.exports = function(config) {
     webpack,
 
     webpackMiddleware: {
-      noInfo: true
+      noInfo: true,
+      stats: {
+        chunks: !WATCHING
+      }
     },
 
     coverageReporter: {
