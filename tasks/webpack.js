@@ -33,7 +33,13 @@ function handleWebpack(done) {
     GUtil.log('[webpack]', stats.toString({
       chunks: !WATCHING
     }));
-    done();
+
+    let hasErrors = (stats.stats || [stats]).reduce((prev, stat) => prev || stat.hasErrors, false);
+    if (hasErrors) {
+      done(new GUtil.PluginError('webpack', 'Build completed with errors'));
+    } else {
+      done();
+    }
   };
 }
 
