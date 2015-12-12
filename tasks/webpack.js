@@ -1,5 +1,6 @@
 import Gulp from 'gulp';
 import GUtil from 'gulp-util';
+import {statSync} from 'fs';
 import webpack from 'webpack';
 import WebpackDevServer from 'webpack-dev-server';
 
@@ -9,7 +10,10 @@ import BABEL_DEFAULTS from 'linoleum/babel-defaults';
 import loadWebpackConfig from '../src/webpack';
 
 Gulp.task('webpack', function(done) {
-  let web = loadWebpackConfig(),
+  let configs = [],
+      web = loadWebpackConfig({
+        entry: {bootstrap: './src/bootstrap'}
+      }),
       server = loadWebpackConfig({
         node: true,
         entry: {index: './src/index'},
@@ -22,8 +26,25 @@ Gulp.task('webpack', function(done) {
         path: `${BUILD_TARGET}/$cover$/`
       });
 
-  webpack([web, server, cover], handleWebpack(done));
+  if (entryExists('./src/bootstrap.js') || entryExists('./src/bootstrap.web.js')) {
+    configs.push(web);
+  }
+  if (entryExists('./src/index.js') || entryExists('./src/index.server.js')) {
+    configs.push(server);
+  }
+  configs.push(cover);
+
+  webpack(configs, handleWebpack(done));
 });
+
+function entryExists(path) {
+  try {
+    statSync(path);
+    return true;
+  } catch (err) {
+    return false;
+  }
+}
 
 function handleWebpack(done) {
   return function(err, stats) {
