@@ -55,7 +55,7 @@ function handleWebpack(done) {
       chunks: !WATCHING
     }));
 
-    let hasErrors = (stats.stats || [stats]).reduce((prev, stat) => prev || stat.hasErrors, false);
+    let hasErrors = (stats.stats || [stats]).reduce((prev, stat) => prev || stat.hasErrors(), false);
     if (hasErrors) {
       done(new GUtil.PluginError('webpack', 'Build completed with errors'));
     } else {
