@@ -4,6 +4,8 @@ import webpack from 'webpack';
 import WebpackDevServer from 'webpack-dev-server';
 
 import {CLIENT_ENTRY, BUILD_TARGET, SERVER_PORT, DEV_SERVER_PORT, WATCHING} from 'linoleum';
+import BABEL_DEFAULTS from 'linoleum/babel-defaults';
+
 import loadWebpackConfig from '../src/webpack';
 
 Gulp.task('webpack', function(done) {
@@ -36,6 +38,16 @@ function handleWebpack(done) {
 }
 
 Gulp.task('webpack:dev-server', function(done) {
+  // Inject the hot reloader transform into the webpack config
+  BABEL_DEFAULTS.plugins = BABEL_DEFAULTS.plugins || [];
+  BABEL_DEFAULTS.plugins.push([require.resolve('babel-plugin-react-transform'), {
+    transforms: [{
+      transform: require.resolve('react-transform-hmr'),
+      imports: ['react'],
+      locals: ['module']
+    }]
+  }]);
+
   let devServer = `http://localhost:${DEV_SERVER_PORT}/`,
       config = loadWebpackConfig({
         entry: {
@@ -52,22 +64,6 @@ Gulp.task('webpack:dev-server', function(done) {
 
   config.output.path = '/static/';
   config.output.publicPath = `${devServer}static/`;
-
-  config.module.loaders.forEach((loader) => {
-    if (loader.babel && process.env.HOT_RELOAD) {   // eslint-disable-line no-process-env
-      loader.query.plugins = loader.query.plugins.concat(
-        require.resolve('babel-plugin-react-transform'));
-      loader.query.extra = {
-        'react-transform': {
-          transforms: [{
-            transform: require.resolve('react-transform-hmr'),
-            imports: ['react'],
-            locals: ['module']
-          }]
-        }
-      };
-    }
-  });
 
   let server = new WebpackDevServer(webpack(config), {
     // webpack-dev-server options
