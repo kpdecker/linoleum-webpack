@@ -4,9 +4,9 @@ import mocha from 'gulp-mocha';
 
 import {Server as KarmaServer} from 'karma';
 
-import plumber from 'linoleum/src/plumber';
+import plumber from '@kpdecker/linoleum/src/plumber';
 
-import {BUILD_TARGET, COVERAGE_TARGET} from 'linoleum';
+import {BUILD_TARGET, COVERAGE_TARGET} from '@kpdecker/linoleum/config';
 
 // This task hierarchy is to hack around
 // https://github.com/sindresorhus/gulp-mocha/issues/112

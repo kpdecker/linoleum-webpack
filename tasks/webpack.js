@@ -4,8 +4,8 @@ import {statSync} from 'fs';
 import webpack from 'webpack';
 import WebpackDevServer from 'webpack-dev-server';
 
-import {CLIENT_ENTRY, BUILD_TARGET, SERVER_PORT, DEV_SERVER_PORT, WATCHING} from 'linoleum';
-import BABEL_DEFAULTS from 'linoleum/babel-defaults';
+import {CLIENT_ENTRY, BUILD_TARGET, SERVER_PORT, DEV_SERVER_PORT, WATCHING} from '@kpdecker/linoleum/config';
+import BABEL_DEFAULTS from '@kpdecker/linoleum/babel-defaults';
 
 import loadWebpackConfig from '../src/webpack';
 

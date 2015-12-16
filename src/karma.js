@@ -7,7 +7,7 @@ import karmaCoverage from 'karma-coverage';
 import karmaMochaReporter from 'karma-mocha-reporter';
 import loadWebpackConfig from './webpack';
 
-import {WATCHING} from 'linoleum';
+import {WATCHING} from '@kpdecker/linoleum/config';
 
 import {resolve} from 'path';
 

@@ -43,15 +43,15 @@
     "webpack-dev-server": "^1.12.1"
   },
   "devDependencies": {
+    "@kpdecker/linoleum": "^1.0.0",
     "babel-core": "^6.2.1",
     "chai": "^3.3.0",
     "gulp": "^3.9.0",
-    "linoleum": "kpdecker/linoleum",
     "sinon": "^1.17.0"
   },
   "eslintConfig": {
     "extends": [
-      "linoleum"
+      "@kpdecker/eslint-config-linoleum"
     ],
     "root": true
   }

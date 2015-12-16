@@ -1,8 +1,7 @@
 import webpack from 'webpack';
 
-import {CLIENT_ENTRY, BUILD_TARGET} from 'linoleum';
-import BABEL_DEFAULTS from 'linoleum/babel-defaults';
-
+import {CLIENT_ENTRY, BUILD_TARGET} from '@kpdecker/linoleum/config';
+import BABEL_DEFAULTS from '@kpdecker/linoleum/babel-defaults';
 
 // Every non-relative module is external
 // abc -> require("abc")
@@ -51,7 +50,7 @@ export default function(options = {}) {
         {
           test: /\.jsx?$/,
           loader: require.resolve('babel-loader'),
-          exclude: /(node_modules(?!\/linoleum(?:-[^/]+)?\/src)|bower_components)/,
+          exclude: /(node_modules(?!\/@kpdecker\/linoleum(?:-[^/]+)?\/src)|bower_components)/,
           query: {
             plugins: [],
             ... BABEL_DEFAULTS,

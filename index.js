@@ -1,5 +1,5 @@
 /* eslint-disable no-var */
-var Linoleum = require('linoleum');
+var Linoleum = require('@kpdecker/linoleum');
 
 require('./tasks/cover');
 require('./tasks/karma');

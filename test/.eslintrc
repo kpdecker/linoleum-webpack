@@ -1,5 +1,5 @@
 {
   extends: [
-    "linoleum/test"
+    "@kpdecker/eslint-config-linoleum/test"
   ]
 }

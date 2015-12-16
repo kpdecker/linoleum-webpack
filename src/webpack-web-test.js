@@ -1,5 +1,5 @@
 /* istanbul ignore next */
-import 'linoleum/src/sandbox';
+import '@kpdecker/linoleum/src/sandbox';
 
 // require all modules ending in "_test" from the
 // current directory and all subdirectories
