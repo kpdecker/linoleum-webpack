@@ -8,10 +8,10 @@ Within `Gulpfile.js`:
 
 ```
 // Init global state
-var Linoleum = require('linoleum');
+var Linoleum = require('@kpdecker/linoleum');
 
 // Include optional linoleum tasks
-require('linoleum-webpack');
+require('@kpdecker/linoleum-webpack');
 ```
 
 Global APIs:

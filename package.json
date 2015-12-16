@@ -1,5 +1,5 @@
 {
-  "name": "linoleum-webpack",
+  "name": "@kpdecker/linoleum-webpack",
   "version": "0.0.0",
   "description": "Webpack build infrastructure for Linoleum projects",
   "main": "index.js",
@@ -16,7 +16,6 @@
     "url": "https://github.com/kpdecker/linoleum-webpack/issues"
   },
   "homepage": "https://github.com/kpdecker/linoleum-webpack#readme",
-  "private": true,
   "dependencies": {
     "babel-loader": "^6.1.0",
     "babel-plugin-react-transform": "^2.0.0-beta1",
