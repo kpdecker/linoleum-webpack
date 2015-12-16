@@ -6,7 +6,7 @@ import BABEL_DEFAULTS from '@kpdecker/linoleum/babel-defaults';
 // Every non-relative module is external
 // abc -> require("abc")
 export function nodeExternals(context, request, cb) {
-  if (/^[a-z\/\-0-9]+$/i.test(request)) {
+  if (/^[@a-z\/\-0-9]+$/i.test(request)) {
     // We need to force lookup from the global require here, while avoiding exporting
     // the library type under electron as this fails when trying to assign to module
     // in the renderer context.
