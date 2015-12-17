@@ -40,6 +40,9 @@ module.exports = function(config) {
       }
     },
 
+    mochaReporter: {
+      output: 'minimal'
+    },
     coverageReporter: {
       type: 'json',
       dir: resolve('coverage/karma/')
