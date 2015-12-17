@@ -19,13 +19,15 @@ export function nodeExternals(context, request, cb) {
 export default function(options = {}) {
   let isProduction = process.env.NODE_ENV === 'production',    // eslint-disable-line no-process-env
       cssLoader,
+      cssLoaderPrebuilt,
       cssModuleNames = isProduction ? `[hash:base64:5]` : `[name]---[local]`,
       cssParams = `?modules&localIdentName=${cssModuleNames}`;
   if (options.node) {
-    cssLoader = `${require.resolve('css-loader/locals')}${cssParams}`;
+    cssLoaderPrebuilt = `${require.resolve('css-loader/locals')}`;
   } else {
-    cssLoader = `${require.resolve('style-loader')}!${require.resolve('css-loader')}${cssParams}`;
+    cssLoaderPrebuilt = `${require.resolve('style-loader')}!${require.resolve('css-loader')}`;
   }
+  cssLoader = `${cssLoaderPrebuilt}${cssParams}`;
 
   let target = 'web';
   if (options.node) {
@@ -64,12 +66,18 @@ export default function(options = {}) {
 
         {
           test: /\.css$/,
-          loader: cssLoader
+          loader: cssLoader,
+          exclude: /node_modules|bower_components/
+        },
+        {
+          test: /(node_modules|bower_components)\/.*\.css$/,
+          loader: cssLoaderPrebuilt
         },
 
         {
           test: /\.styl$/,
-          loader: `${cssLoader}!stylus-loader`
+          loader: `${cssLoader}!stylus-loader`,
+          exclude: /node_modules|bower_components/
         },
 
         {
