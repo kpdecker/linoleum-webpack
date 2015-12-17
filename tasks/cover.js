@@ -15,7 +15,7 @@ Gulp.task('cover:server:run', function() {
 
   return Gulp.src(`${BUILD_TARGET}/$cover$/*.js`)
       .pipe(plumber())
-      .pipe(mocha());
+      .pipe(mocha({reporter: 'dot'}));
 });
 Gulp.task('cover:server', ['cover:server:run'], function() {
   return Gulp.src(`${BUILD_TARGET}/$cover$/*.js`)
