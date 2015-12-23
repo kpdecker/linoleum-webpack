@@ -29,9 +29,17 @@ export default function(options = {}) {
   }
   cssLoader = `${cssLoaderPrebuilt}${cssParams}`;
 
-  let target = 'web';
+  let target = 'web',
+      babelOptions;
   if (options.node) {
     target = 'node';
+  }
+
+  if (options.cover) {
+    babelOptions = {
+      auxiliaryCommentBefore: 'istanbul ignore start',
+      auxiliaryCommentAfter: 'istanbul ignore end'
+    };
   }
 
   let ret = {
@@ -56,6 +64,7 @@ export default function(options = {}) {
           query: {
             plugins: [],
             ... BABEL_DEFAULTS,
+            ... babelOptions,
 
             // Babel Loader does not support inline source maps that are being used elsewhere, so
             // we need to reset
@@ -122,7 +131,9 @@ export default function(options = {}) {
           ? ['', '.server.js', '.jsx', '.js']
           : ['', '.web.js', '.jsx', '.js']
     },
-    devtool: isProduction ? 'source-map' : 'inline-source-map'
+
+    // Must use inline source maps for proper coverage mapping
+    devtool: !options.cover ? 'source-map' : 'inline-source-map'
   };
 
   // Strip development code
