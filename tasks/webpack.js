@@ -9,32 +9,46 @@ import BABEL_DEFAULTS from '@kpdecker/linoleum/babel-defaults';
 
 import loadWebpackConfig from '../src/webpack';
 
+let compilers;
+
 Gulp.task('webpack', function(done) {
-  let configs = [],
-      web = loadWebpackConfig({
-        entry: {bootstrap: './src/bootstrap'}
-      }),
-      server = loadWebpackConfig({
-        node: true,
-        entry: {index: './src/index'},
-        path: `${BUILD_TARGET}/`
-      }),
-      cover = loadWebpackConfig({
-        node: true,
-        cover: true,
-        entry: {cover: require.resolve('../src/webpack-server-test')},
-        path: `${BUILD_TARGET}/$cover$/`
-      });
+  if (!compilers) {
+    let configs = [],
+        web = loadWebpackConfig({
+          entry: {bootstrap: './src/bootstrap'}
+        }),
+        server = loadWebpackConfig({
+          node: true,
+          entry: {index: './src/index'},
+          path: `${BUILD_TARGET}/`
+        }),
+        cover = loadWebpackConfig({
+          node: true,
+          cover: true,
+          entry: {cover: require.resolve('../src/webpack-server-test')},
+          path: `${BUILD_TARGET}/$cover$/`
+        });
 
-  if (entryExists('./src/bootstrap.js') || entryExists('./src/bootstrap.web.js')) {
-    configs.push(web);
-  }
-  if (entryExists('./src/index.js') || entryExists('./src/index.server.js')) {
-    configs.push(server);
-  }
-  configs.push(cover);
+    if (entryExists('./src/bootstrap.js') || entryExists('./src/bootstrap.web.js')) {
+      configs.push(web);
+    }
+    if (entryExists('./src/index.js') || entryExists('./src/index.server.js')) {
+      configs.push(server);
+    }
+    configs.push(cover);
 
-  webpack(configs, handleWebpack(done));
+    compilers = configs.map((config) => webpack(config));
+  }
+
+  let currentCompilers = compilers.slice();
+  (function exec(err) {
+    let compiler = currentCompilers.pop();
+    if (!err && compiler) {
+      compiler.run(handleWebpack(exec));
+    } else {
+      done();
+    }
+  }());
 });
 
 function entryExists(path) {
@@ -52,7 +66,9 @@ function handleWebpack(done) {
       throw new GUtil.PluginError('webpack', err);
     }
     GUtil.log('[webpack]', stats.toString({
-      chunks: !WATCHING
+      chunks: !WATCHING,
+      cached: false,
+      cachedAssets: false
     }));
 
     let hasErrors = (stats.stats || [stats]).reduce((prev, stat) => prev || stat.hasErrors(), false);
