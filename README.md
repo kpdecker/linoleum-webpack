@@ -11,7 +11,7 @@ Within `Gulpfile.js`:
 var Linoleum = require('@kpdecker/linoleum');
 
 // Include optional linoleum tasks
-require('@kpdecker/linoleum-webpack');
+var LinoleumWebpack = require('@kpdecker/linoleum-webpack');
 ```
 
 Global APIs:
@@ -38,6 +38,14 @@ Defines:
 - `cover:web` task which runs webpack coverage tests in browser.
 
 For webpack tests, each package will filter the tests that are imported based on the file suffix. `.server.js` tests will only run under the `cover:server` task and `.web.js` tests will only run under the `cover:web` task. Simple `.js` files will run under both.
+
+When running in watch mode, the optional `LinoleumWebpack.watchHandler` change handler can be used to ensure that rebuilds always invalidate. Depending on the exact OS, Editor, and Node versions in use, the default configuration might not always trigger.
+
+```
+Linoleum.watch(WATCH_FILES, 'build', {
+  onChange: LinoleumWebpack.watchHandler
+});
+```
 
 ## Common issues
 ### Karma

@@ -3,7 +3,8 @@ var Linoleum = require('@kpdecker/linoleum');
 
 require('./tasks/cover');
 require('./tasks/karma');
-require('./tasks/webpack');
+
+var webpack = require('./tasks/webpack');
 
 // Config values. May be overriden prior to tasks executing.
 Linoleum.CLIENT_ENTRY = './src/bootstrap';
@@ -24,3 +25,5 @@ Linoleum.testFiles = function() {
       return '!' + file;    // eslint-disable-line prefer-template
     }));
 };
+
+module.exports.watchHandler = webpack.watchHandler;

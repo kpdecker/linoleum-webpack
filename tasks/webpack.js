@@ -51,6 +51,27 @@ Gulp.task('webpack', function(done) {
   }());
 });
 
+export function watchHandler(events) {
+  compilers.forEach((compiler) => {
+    events.forEach((event) => {
+      // If we know something has changed, then we want to force a reload. This works around potential
+      // timing issues between fs.stat and external processes that can produce inconsistent timestamp values
+      // immediately after file change occurs.
+      //
+      // This is hacky and longer term we should probably find a way to replace CachePlugin within webpack
+      // but this works for now.
+      let dependencies = compiler._lastCompilationFileDependencies;
+      if (dependencies) {
+        let index = dependencies.indexOf(event.path);
+        if (index >= 0) {
+          dependencies.splice(index, 1);
+        }
+      }
+      delete compiler.fileTimestamps[event.path];
+    });
+  });
+}
+
 function entryExists(path) {
   try {
     statSync(path);
