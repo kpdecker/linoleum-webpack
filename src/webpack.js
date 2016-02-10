@@ -93,6 +93,10 @@ export default function(options = {}) {
           test: /\.json$/,
           loader: require.resolve('json-loader')
         },
+        {
+          test: /\.(?:png|jpe?g|gif|svg)/,
+          loader: `${require.resolve('url-loader')}?limit=5000`
+        },
 
         {
           test: /\/sinon\/.*\.js$/,
