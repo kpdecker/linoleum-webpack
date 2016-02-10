@@ -21,6 +21,7 @@
     "babel-plugin-react-transform": "^2.0.0-beta1",
     "convert-source-map": "^1.1.1",
     "css-loader": "^0.21.0",
+    "extract-text-webpack-plugin": "^1.0.1",
     "file-loader": "^0.8.5",
     "gulp-istanbul": "^0.10.0",
     "gulp-mocha": "github:kpdecker/gulp-mocha",

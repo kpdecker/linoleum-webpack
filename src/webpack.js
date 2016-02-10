@@ -1,4 +1,5 @@
 import webpack from 'webpack';
+import ExtractTextPlugin from 'extract-text-webpack-plugin';
 
 import {CLIENT_ENTRY, BUILD_TARGET} from '@kpdecker/linoleum/config';
 import BABEL_DEFAULTS from '@kpdecker/linoleum/babel-defaults';
@@ -20,14 +21,27 @@ export default function(options = {}) {
   let isProduction = process.env.NODE_ENV === 'production',    // eslint-disable-line no-process-env
       cssLoader,
       cssLoaderPrebuilt,
+      stylusLoader,
       cssModuleNames = isProduction ? `[hash:base64:5]` : `[name]---[local]`,
       cssParams = `?modules&localIdentName=${cssModuleNames}`;
   if (options.node) {
     cssLoaderPrebuilt = `${require.resolve('css-loader/locals')}`;
+    cssLoader = `${cssLoaderPrebuilt}${cssParams}`;
+    stylusLoader = `${cssLoaderPrebuilt}${cssParams}!stylus-loader`;
   } else {
-    cssLoaderPrebuilt = `${require.resolve('style-loader')}!${require.resolve('css-loader')}`;
+    let baseLoader = `${require.resolve('css-loader')}`;
+    cssLoaderPrebuilt = ExtractTextPlugin.extract(
+          require.resolve('style-loader'),
+          baseLoader);
+    stylusLoader = ExtractTextPlugin.extract(
+          require.resolve('style-loader'),
+          `${baseLoader}${cssParams}!stylus-loader`
+        );
+    cssLoader = ExtractTextPlugin.extract(
+          require.resolve('style-loader'),
+          `${baseLoader}${cssParams}`
+        );
   }
-  cssLoader = `${cssLoaderPrebuilt}${cssParams}`;
 
   let target = 'web',
       babelOptions;
@@ -85,7 +99,7 @@ export default function(options = {}) {
 
         {
           test: /\.styl$/,
-          loader: `${cssLoader}!stylus-loader`,
+          loader: stylusLoader,
           exclude: /node_modules|bower_components/
         },
 
@@ -139,6 +153,12 @@ export default function(options = {}) {
     // Must use inline source maps for proper coverage mapping
     devtool: !options.cover ? 'source-map' : 'inline-source-map'
   };
+
+  if (!options.node) {
+    ret.plugins.push(
+      new ExtractTextPlugin('[name].css', {allChunks: true})
+    );
+  }
 
   // Strip development code
   if (isProduction) {
