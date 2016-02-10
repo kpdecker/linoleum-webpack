@@ -108,7 +108,7 @@ export default function(options = {}) {
           loader: require.resolve('json-loader')
         },
         {
-          test: /\.(?:png|jpe?g|gif|svg)/,
+          test: /\.(?:png|jpe?g|gif|svg|eot|ttf|woff2?)/,
           loader: `${require.resolve('url-loader')}?limit=5000`
         },
 
