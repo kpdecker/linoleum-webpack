@@ -16,7 +16,7 @@ describe('webpack config', function() {
     process.env.NODE_ENV = 'production';
 
     let config = webpack();
-    expect(config.plugins).to.have.length(3);
+    expect(config.plugins).to.have.length(4);
   });
 
   it('should generate node config', function() {
