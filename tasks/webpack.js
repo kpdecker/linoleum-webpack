@@ -155,7 +155,7 @@ Gulp.task('webpack:dev-server', function(done) {
       version: false
     }
   });
-  server.listen(DEV_SERVER_PORT, 'localhost', function() {
+  server.listen(DEV_SERVER_PORT, function() {
     console.log(`Dev server listening on ${devServer}`);    // eslint-disable-line no-console
     done();
   });
