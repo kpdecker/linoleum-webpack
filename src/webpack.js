@@ -1,7 +1,7 @@
 import webpack from 'webpack';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
 
-import {CLIENT_ENTRY, BUILD_TARGET} from '@kpdecker/linoleum/config';
+import {CLIENT_ENTRY, BUILD_TARGET, applyWebpackConfig} from '@kpdecker/linoleum/config';
 import BABEL_DEFAULTS from '@kpdecker/linoleum/babel-defaults';
 
 // Every non-relative module is external
@@ -187,5 +187,6 @@ export default function(options = {}) {
     );
   }
 
-  return ret;
+  let apply = applyWebpackConfig || ((config) => config);
+  return apply(ret);
 }

@@ -4,7 +4,7 @@ import {statSync} from 'fs';
 import webpack from 'webpack';
 import WebpackDevServer from 'webpack-dev-server';
 
-import {CLIENT_ENTRY, BUILD_TARGET, SERVER_PORT, DEV_SERVER_PORT, WATCHING, applyWebpackConfig} from '@kpdecker/linoleum/config';
+import {CLIENT_ENTRY, BUILD_TARGET, SERVER_PORT, DEV_SERVER_PORT, WATCHING} from '@kpdecker/linoleum/config';
 import BABEL_DEFAULTS from '@kpdecker/linoleum/babel-defaults';
 
 import loadWebpackConfig from '../src/webpack';
@@ -13,22 +13,21 @@ let compilers;
 
 Gulp.task('webpack', function(done) {
   if (!compilers) {
-    let apply = applyWebpackConfig || ((config) => config);
     let configs = [],
-        web = apply(loadWebpackConfig({
+        web = loadWebpackConfig({
           entry: {bootstrap: './src/bootstrap'}
-        })),
-        server = apply(loadWebpackConfig({
+        }),
+        server = loadWebpackConfig({
           node: true,
           entry: {index: './src/index'},
           path: `${BUILD_TARGET}/`
-        })),
-        cover = apply(loadWebpackConfig({
+        }),
+        cover = loadWebpackConfig({
           node: true,
           cover: true,
           entry: {cover: require.resolve('../src/webpack-server-test')},
           path: `${BUILD_TARGET}/$cover$/`
-        }));
+        });
 
     if (entryExists('./src/bootstrap.js') || entryExists('./src/bootstrap.web.js')) {
       configs.push(web);
