@@ -114,6 +114,7 @@ Gulp.task('webpack:dev-server', function(done) {
 
   let devServer = `http://localhost:${DEV_SERVER_PORT}/`,
       config = loadWebpackConfig({
+        hotReload: true,
         entry: {
           bootstrap: [
             `${require.resolve('webpack-dev-server/client')}?${devServer}`,

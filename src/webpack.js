@@ -19,28 +19,35 @@ export function nodeExternals(context, request, cb) {
 
 export default function(options = {}) {
   let isProduction = process.env.NODE_ENV === 'production',    // eslint-disable-line no-process-env
-      cssLoader,
-      cssLoaderPrebuilt,
-      stylusLoader,
+      baseLoader,
       cssModuleNames = isProduction ? `[hash:base64:5]` : `[name]---[local]`,
-      cssParams = `?modules&localIdentName=${cssModuleNames}`;
+      cssBaseParams = `?${isProduction ? 'minimze' : '-minimze'}`,
+      cssParams = `${cssBaseParams}&modules&localIdentName=${cssModuleNames}`;
   if (options.node) {
-    cssLoaderPrebuilt = `${require.resolve('css-loader/locals')}`;
-    cssLoader = `${cssLoaderPrebuilt}${cssParams}`;
-    stylusLoader = `${cssLoaderPrebuilt}${cssParams}!stylus-loader`;
+    baseLoader = require.resolve('css-loader/locals');
   } else {
-    let baseLoader = `${require.resolve('css-loader')}`;
-    cssLoaderPrebuilt = ExtractTextPlugin.extract(
-          require.resolve('style-loader'),
-          baseLoader);
-    stylusLoader = ExtractTextPlugin.extract(
-          require.resolve('style-loader'),
-          `${baseLoader}${cssParams}!stylus-loader`
-        );
-    cssLoader = ExtractTextPlugin.extract(
-          require.resolve('style-loader'),
-          `${baseLoader}${cssParams}`
-        );
+    baseLoader = `${require.resolve('css-loader')}`;
+  }
+
+  let cssLoaderGlobal = `${baseLoader}${cssBaseParams}`,
+      cssLoader = `${baseLoader}${cssParams}`,
+      lessLoaderGlobal = `${baseLoader}${cssBaseParams}!less-loader`,
+      lessLoader = `${baseLoader}${cssParams}!less-loader`,
+      stylusLoader = `${baseLoader}${cssParams}!stylus-loader`;
+
+  let styleLoader = require.resolve('style-loader');
+  if (!options.hotReload && !options.node) {
+    cssLoaderGlobal = ExtractTextPlugin.extract(styleLoader, cssLoaderGlobal);
+    cssLoader = ExtractTextPlugin.extract(styleLoader, cssLoader);
+    lessLoaderGlobal = ExtractTextPlugin.extract(styleLoader, lessLoaderGlobal);
+    lessLoader = ExtractTextPlugin.extract(styleLoader, lessLoader);
+    stylusLoader = ExtractTextPlugin.extract(styleLoader, stylusLoader);
+  } else if (!options.node) {
+    cssLoaderGlobal = `${styleLoader}!${cssLoaderGlobal}`;
+    cssLoader = `${styleLoader}!${cssLoader}`;
+    lessLoaderGlobal = `${styleLoader}!${lessLoaderGlobal}`;
+    lessLoader = `${styleLoader}!${lessLoader}`;
+    stylusLoader = `${styleLoader}!${stylusLoader}`;
   }
 
   let target = 'web',
@@ -94,12 +101,28 @@ export default function(options = {}) {
         },
         {
           test: /(node_modules|bower_components)\/.*\.css$/,
-          loader: cssLoaderPrebuilt
+          loader: cssLoaderGlobal
         },
 
         {
           test: /\.styl$/,
           loader: stylusLoader,
+          exclude: /node_modules|bower_components/
+        },
+
+        {
+          test: /\.global\.less$/,
+          loader: lessLoaderGlobal
+        },
+        {
+          test: /(node_modules|bower_components)\/.*\.less$/,
+          loader: lessLoaderGlobal
+        },
+        {
+          test(test) {
+            return (/\.less$/.test(test)) && !(/\.global\.less$/.test(test));
+          },
+          loader: lessLoader,
           exclude: /node_modules|bower_components/
         },
 
