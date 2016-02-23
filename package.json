@@ -1,6 +1,6 @@
 {
   "name": "@kpdecker/linoleum-webpack",
-  "version": "2.2.1",
+  "version": "2.3.0",
   "description": "Webpack build infrastructure for Linoleum projects",
   "main": "index.js",
   "scripts": {
