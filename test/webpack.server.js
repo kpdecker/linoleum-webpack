@@ -18,6 +18,10 @@ describe('webpack config', function() {
     let config = webpack();
     expect(config.plugins).to.have.length(4);
   });
+  it('should generate hot reload config', function() {
+    let {module: {loaders}} = webpack({hotReload: true});
+    expect(loaders.filter((loader) => loader.test.exec ? loader.test.exec('foo.global.less') : loader.test('foo.global.less'))).to.have.length(1);
+  });
 
   it('should generate node config', function() {
     let config = webpack({node: true});
