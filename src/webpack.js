@@ -169,8 +169,8 @@ export default function(options = {}) {
         sinon: 'sinon/pkg/sinon'
       },
       extensions: options.node
-          ? ['', '.server.js', '.jsx', '.js']
-          : ['', '.web.js', '.jsx', '.js']
+          ? ['', '.server.js', '.server.jsx', '.jsx', '.js']
+          : ['', '.web.js', '.web.jsx', '.jsx', '.js']
     },
 
     // Must use inline source maps for proper coverage mapping
