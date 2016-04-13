@@ -193,15 +193,7 @@ export default function(options = {}) {
         'process.env': {
           'NODE_ENV': '"production"'
         }
-      }),
-      /* istanbul ignore next */
-      function() {
-        this.plugin('done', (stats) => {
-          writeFileSync(
-            join(ret.output.path, 'stats.json'),
-            JSON.stringify(stats.toJson(), undefined, 2));
-        });
-      }
+      })
     );
   } else if (!options.node) {
     ret.plugins.push(
@@ -218,6 +210,19 @@ export default function(options = {}) {
         compress: true,
         mangle: true
       })
+    );
+  }
+
+  if (!options.cover) {
+    ret.plugins.push(
+      /* istanbul ignore next */
+      function() {
+        this.plugin('done', (stats) => {
+          writeFileSync(
+            join(ret.output.path, 'stats.json'),
+            JSON.stringify(stats.toJson(), undefined, 2));
+        });
+      }
     );
   }
 
