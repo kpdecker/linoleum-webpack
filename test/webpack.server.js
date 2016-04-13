@@ -16,7 +16,7 @@ describe('webpack config', function() {
     process.env.NODE_ENV = 'production';
 
     let config = webpack();
-    expect(config.plugins).to.have.length(4);
+    expect(config.plugins).to.have.length(5);
   });
   it('should generate hot reload config', function() {
     let {module: {loaders}} = webpack({hotReload: true});

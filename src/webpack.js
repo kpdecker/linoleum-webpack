@@ -4,6 +4,9 @@ import ExtractTextPlugin from 'extract-text-webpack-plugin';
 import {CLIENT_ENTRY, BUILD_TARGET, applyWebpackConfig} from '@kpdecker/linoleum/config';
 import BABEL_DEFAULTS from '@kpdecker/linoleum/babel-defaults';
 
+import {join} from 'path';
+import {writeFileSync} from 'fs';
+
 // Every non-relative module is external
 // abc -> require("abc")
 export function nodeExternals(context, request, cb) {
@@ -190,7 +193,15 @@ export default function(options = {}) {
         'process.env': {
           'NODE_ENV': '"production"'
         }
-      })
+      }),
+      /* istanbul ignore next */
+      function() {
+        this.plugin('done', (stats) => {
+          writeFileSync(
+            join(ret.output.path, 'stats.json'),
+            JSON.stringify(stats.toJson(), undefined, 2));
+        });
+      }
     );
   } else if (!options.node) {
     ret.plugins.push(
