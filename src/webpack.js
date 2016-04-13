@@ -73,7 +73,7 @@ export default function(options = {}) {
     },
     output: {
       path: options.path || `${BUILD_TARGET}/$client$/`,
-      filename: isProduction ? '[hash]/[name].js' : '[name].js',
+      filename: isProduction && !options.node && !options.cover ? '[hash]/[name].js' : '[name].js',
       publicPath: '/static/',
       libraryTarget: options.node ? 'commonjs2' : 'var',
       pathinfo: !isProduction
