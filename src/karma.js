@@ -7,7 +7,7 @@ import karmaCoverage from 'karma-coverage';
 import karmaMochaReporter from 'karma-mocha-reporter';
 import loadWebpackConfig from './webpack';
 
-import {WATCHING} from '@kpdecker/linoleum/config';
+import {MOCHA_TIMEOUT, WATCHING} from '@kpdecker/linoleum/config';
 
 import {resolve} from 'path';
 
@@ -40,6 +40,11 @@ module.exports = function(config) {
       }
     },
 
+    client: {
+      mocha: {
+        timeout: MOCHA_TIMEOUT
+      }
+    },
     mochaReporter: {
       output: 'minimal'
     },

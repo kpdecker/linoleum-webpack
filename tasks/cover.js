@@ -6,7 +6,7 @@ import {Server as KarmaServer} from 'karma';
 
 import plumber from '@kpdecker/linoleum/src/plumber';
 
-import {BUILD_TARGET, COVERAGE_TARGET} from '@kpdecker/linoleum/config';
+import {BUILD_TARGET, COVERAGE_TARGET, MOCHA_TIMEOUT} from '@kpdecker/linoleum/config';
 
 // This task hierarchy is to hack around
 // https://github.com/sindresorhus/gulp-mocha/issues/112
@@ -15,7 +15,7 @@ Gulp.task('cover:server:run', function() {
 
   return Gulp.src(`${BUILD_TARGET}/$cover$/*.js`)
       .pipe(plumber())
-      .pipe(mocha({reporter: 'dot'}));
+      .pipe(mocha({reporter: 'dot', timeout: MOCHA_TIMEOUT}));
 });
 Gulp.task('cover:server', ['cover:server:run'], function() {
   return Gulp.src(`${BUILD_TARGET}/$cover$/*.js`)
