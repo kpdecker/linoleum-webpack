@@ -1,7 +1,7 @@
 import webpack from 'webpack';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
 
-import {CLIENT_ENTRY, BUILD_TARGET, applyWebpackConfig} from '@kpdecker/linoleum/config';
+import {CLIENT_ENTRY, BUILD_TARGET, HASH_ASSETS, applyWebpackConfig} from '@kpdecker/linoleum/config';
 import BABEL_DEFAULTS from '@kpdecker/linoleum/babel-defaults';
 
 import {join} from 'path';
@@ -66,15 +66,20 @@ export default function(options = {}) {
     };
   }
 
+  let useHash = HASH_ASSETS && isProduction && !options.node && !options.cover,
+      hash = useHash ? '[hash:6]/' : '',
+      basepath = options.path || `${BUILD_TARGET}/$client$/`,
+      filename = '[name].js';
+
   let ret = {
     target,
     entry: options.entry || {
       bootstrap: CLIENT_ENTRY
     },
     output: {
-      path: options.path || `${BUILD_TARGET}/$client$/`,
-      filename: '[name].js',
-      publicPath: '/static/',
+      path: `${basepath}${hash}`,
+      filename,
+      publicPath: `/static/${hash}`,
       libraryTarget: options.node ? 'commonjs2' : 'var',
       pathinfo: !isProduction
     },
@@ -182,7 +187,7 @@ export default function(options = {}) {
 
   if (!options.node) {
     ret.plugins.push(
-      new ExtractTextPlugin('[name].css', {allChunks: true})
+      new ExtractTextPlugin(filename.replace(/\.js$/, '.css'), {allChunks: true})
     );
   }
 
@@ -219,7 +224,7 @@ export default function(options = {}) {
       function() {
         this.plugin('done', (stats) => {
           writeFileSync(
-            join(ret.output.path, 'stats.json'),
+            join(basepath, 'stats.json'),
             JSON.stringify(stats.toJson(), undefined, 2));
         });
       }

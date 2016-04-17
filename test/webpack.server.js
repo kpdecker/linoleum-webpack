@@ -1,15 +1,20 @@
 /* eslint-disable no-process-env */
 import webpack from '../src/webpack';
 
+import * as Config from '@kpdecker/linoleum/config';
+
 import {expect} from 'chai';
 
 describe('webpack config', function() {
-  let env;
+  let env,
+      hashAssets;
   beforeEach(() => {
     env = process.env.NODE_ENV;
+    hashAssets = Config.HASH_ASSETS;
   });
   afterEach(() => {
     process.env.NODE_ENV = env;
+    Config.HASH_ASSETS = hashAssets;
   });
 
   it('should generate production config', function() {
@@ -45,5 +50,14 @@ describe('webpack config', function() {
       expect(type).to.not.exist;
       done();
     });
+  });
+
+  it('should add hash to paths', function() {
+    Config.HASH_ASSETS = true;
+    process.env.NODE_ENV = 'production';
+
+    let config = webpack({});
+    expect(config.output.path).to.match(/hash:/);
+    expect(config.output.publicPath).to.match(/hash:/);
   });
 });
