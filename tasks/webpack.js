@@ -12,6 +12,10 @@ import loadWebpackConfig from '../src/webpack';
 let compilers;
 
 Gulp.task('webpack', function(done) {
+  let {NODE_ENV, BUILD_ENV} = process.env,       // eslint-disable-line no-process-env
+      isProduction = NODE_ENV === 'production',
+      isTestOnly = BUILD_ENV === 'test';
+
   if (!compilers) {
     let configs = [],
         web = loadWebpackConfig({
@@ -29,13 +33,17 @@ Gulp.task('webpack', function(done) {
           path: `${BUILD_TARGET}/$cover$/`
         });
 
-    if (entryExists('./src/bootstrap.js') || entryExists('./src/bootstrap.web.js')) {
-      configs.push(web);
+    if (!isTestOnly) {
+      if (entryExists('./src/bootstrap.js') || entryExists('./src/bootstrap.web.js')) {
+        configs.push(web);
+      }
+      if (entryExists('./src/index.js') || entryExists('./src/index.server.js')) {
+        configs.push(server);
+      }
     }
-    if (entryExists('./src/index.js') || entryExists('./src/index.server.js')) {
-      configs.push(server);
+    if (!isProduction) {
+      configs.push(cover);
     }
-    configs.push(cover);
 
     compilers = configs.map((config) => webpack(config));
   }
