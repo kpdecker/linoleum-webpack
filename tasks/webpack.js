@@ -26,11 +26,11 @@ Gulp.task('webpack', function(done) {
           entry: {index: './src/index'},
           path: `${BUILD_TARGET}/`
         }),
-        cover = loadWebpackConfig({
+        test = loadWebpackConfig({
           node: true,
-          cover: true,
-          entry: {cover: require.resolve('../src/webpack-server-test')},
-          path: `${BUILD_TARGET}/$cover$/`
+          cover: !process.env.NO_COVER,   // eslint-disable-line no-process-env,
+          entry: {test: require.resolve('../src/webpack-server-test')},
+          path: `${BUILD_TARGET}/$test$/`
         });
 
     if (!isTestOnly) {
@@ -42,7 +42,7 @@ Gulp.task('webpack', function(done) {
       }
     }
     if (!isProduction) {
-      configs.push(cover);
+      configs.push(test);
     }
 
     compilers = configs.map((config) => webpack(config));

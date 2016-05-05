@@ -8,7 +8,7 @@ Gulp.task('build', ['clean', 'lint'], function(done) {
   Linoleum.runTask('webpack', done);
 });
 Gulp.task('cover', ['build'], function(done) {
-  Linoleum.runTask(['cover:untested', 'cover:server', 'cover:web', 'cover:report'], done);
+  Linoleum.runTask(['cover:untested', 'test:server', 'test:web', 'cover:report'], done);
 });
 
 Linoleum.watch(Linoleum.jsFiles(), 'cover', {
