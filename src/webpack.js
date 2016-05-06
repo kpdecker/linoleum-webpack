@@ -223,6 +223,10 @@ export default function(options = {}) {
       /* istanbul ignore next */
       function() {
         this.plugin('done', (stats) => {
+          if (stats.hasErrors()) {
+            return;
+          }
+
           writeFileSync(
             join(basepath, 'stats.json'),
             JSON.stringify(stats.toJson(), undefined, 2));
