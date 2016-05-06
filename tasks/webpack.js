@@ -14,7 +14,8 @@ let compilers;
 Gulp.task('webpack', function(done) {
   let {NODE_ENV, BUILD_ENV} = process.env,       // eslint-disable-line no-process-env
       isProduction = NODE_ENV === 'production',
-      isTestOnly = BUILD_ENV === 'test';
+      isTestOnly = BUILD_ENV === 'test',
+      noTests = BUILD_ENV === 'client' || isProduction;
 
   if (!compilers) {
     let configs = [],
@@ -41,7 +42,7 @@ Gulp.task('webpack', function(done) {
         configs.push(server);
       }
     }
-    if (!isProduction) {
+    if (!noTests) {
       configs.push(test);
     }
 
