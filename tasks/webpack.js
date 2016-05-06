@@ -55,7 +55,7 @@ Gulp.task('webpack', function(done) {
     if (!err && compiler) {
       compiler.run(handleWebpack(exec));
     } else {
-      done();
+      done(err);
     }
   }());
 });
