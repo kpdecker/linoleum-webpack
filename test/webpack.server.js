@@ -60,4 +60,8 @@ describe('webpack config', function() {
     expect(config.output.path).to.match(/hash:/);
     expect(config.output.publicPath).to.match(/hash:/);
   });
+
+  it('should not define process.browser', function() {
+    expect(process.browser).to.not.exist;
+  });
 });

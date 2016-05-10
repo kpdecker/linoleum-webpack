@@ -197,7 +197,8 @@ export default function(options = {}) {
       new webpack.DefinePlugin({
         'process.env': {
           'NODE_ENV': '"production"'
-        }
+        },
+        'process.browser': `${!options.node}`
       })
     );
   } else if (!options.node) {
@@ -205,7 +206,8 @@ export default function(options = {}) {
       new webpack.DefinePlugin({
         'process.env': {
           'NODE_ENV': '"development"'
-        }
+        },
+        'process.browser': 'true'
       })
     );
   }
