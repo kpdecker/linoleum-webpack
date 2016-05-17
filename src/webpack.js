@@ -64,6 +64,12 @@ export default function(options = {}) {
       auxiliaryCommentBefore: 'istanbul ignore start',
       auxiliaryCommentAfter: 'istanbul ignore end'
     };
+  } else if (isProduction) {
+    babelOptions = {
+      plugins: (BABEL_DEFAULTS.plugins || []).concat([
+        require.resolve('babel-plugin-transform-react-constant-elements')
+      ])
+    };
   }
 
   let useHash = HASH_ASSETS && isProduction && !options.node && !options.cover,

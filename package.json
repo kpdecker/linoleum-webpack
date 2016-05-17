@@ -19,6 +19,7 @@
   "dependencies": {
     "babel-loader": "^6.1.0",
     "babel-plugin-react-transform": "^2.0.0-beta1",
+    "babel-plugin-transform-react-constant-elements": "^6.8.0",
     "convert-source-map": "^1.1.1",
     "css-loader": "^0.21.0",
     "extract-text-webpack-plugin": "^1.0.1",
