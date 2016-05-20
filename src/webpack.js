@@ -244,5 +244,5 @@ export default function(options = {}) {
   }
 
   let apply = applyWebpackConfig || ((config) => config);
-  return apply(ret);
+  return apply(ret, options);
 }
